@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minecraft Inventory System</title>
+    <style>
+        
+        body {
+            background-image: url('bg.jpg');
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			background-position:0%;
+			background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.8;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .buttons {
+            text-align: center;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #cc9c6c;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .buttons button:hover {
+            background-color: #fee686;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Minecraft Inventory</h1>
+        <div class="buttons">
+            <button onclick="addItem()">Add Item</button>
+            <button onclick="addNoOfItem()">Add Quantity</button>
+            <button onclick="subNoOfItem()">Remove Quantity</button>
+            <button onclick="removeItem()">Remove Item</button>
+        </div>
+        <br>
+
+        <table id="inventoryTable">
+            <tr>
+                <th>Item Name</th>
+                <th>No. of Items</th>
+            </tr>
+        </table>
+
+    </div>
+    <script>
+
+        var supply = [];
+
+        function addItem() {
+            var itemName = prompt("Input item name:");
+            var num = parseInt(prompt("Input number of items:"));
+            if (itemName && !isNaN(num)) {
+                supply.push({ itemName: itemName, noOfItem: num });
+                displayItems();
+            }
+        }
+
+        function addNoOfItem() {
+            var itemName = prompt("Input item name:");
+            var num = parseInt(prompt("Input number of items to add:"));
+            if (itemName && !isNaN(num)) {
+                var item = supply.find(item => item.itemName === itemName);
+                if (item) {
+                    item.noOfItem += num;
+                    displayItems();
+                } else {
+                    alert("Item not found in inventory.");
+                }
+            }
+        }
+
+        function subNoOfItem() {
+            var itemName = prompt("Input item name:");
+            var num = parseInt(prompt("Input number of items to remove:"));
+            if (itemName && !isNaN(num)) {
+                var item = supply.find(item => item.itemName === itemName);
+                if (item) {
+                    if (item.noOfItem >= num) {
+                        item.noOfItem -= num;
+                        displayItems();
+                    } else {
+                        alert("Not enough items in inventory.");
+                    }
+                } else {
+                    alert("Item not found in inventory.");
+                }
+            }
+        }
+
+        function removeItem() {
+            var itemName = prompt("Input item name to remove:");
+            var index = supply.findIndex(item => item.itemName === itemName);
+            if (index !== -1) {
+                supply.splice(index, 1);
+                displayItems();
+            } else {
+                alert("Item not found in inventory.");
+            }
+        }
+
+        function displayItems() {
+            var table = document.getElementById("inventoryTable");
+            table.innerHTML = "<tr><th>Item Name</th><th>No. of Items</th></tr>";
+            supply.forEach(item => {
+                var row = table.insertRow();
+                var itemNameCell = row.insertCell(0);
+                var noOfItemCell = row.insertCell(1);
+                itemNameCell.textContent = item.itemName;
+                noOfItemCell.textContent = item.noOfItem;
+            });
+        }
+        
+    </script>
+</body>
+</html>
